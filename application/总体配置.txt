@@ -1,0 +1,10 @@
+$autoload['libraries'] = array('session');
+$autoload['helper'] = array('url','date','file');
+
+config.php
+$config['encryption_key'] = '1122334455667788991010abccyangbo18216575@qq.com';
+$config['sess_table_name']		= 'ci_sessions';		#session数据库表名字
+$config['sess_use_database'] = TRUE;		#session开启数据库表,需要设置成TRUE
+
+
+constants.php	define('ST_SALT_LENGTH', 9);
