@@ -3,6 +3,10 @@
 2015年2月9日PHP
 */
 
+//存储已经登录后台的用户信息
+//任何加载了这个类的类
+//eg.如果要得到目前登录后台的账号uid	可以$this->user->uid
+
 class User{
 	
 	private $_user = array();

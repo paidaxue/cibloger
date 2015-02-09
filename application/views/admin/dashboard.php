@@ -1,9 +1,14 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
-<?php $this->load->view('admin/header');?>
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+$this->load->view('admin/header');
+$this->load->view('admin/menu');
+?>
+
 
 <div>
 
 博客后台管理
+
+
 </div>
 
 

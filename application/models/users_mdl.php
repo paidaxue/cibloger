@@ -74,6 +74,30 @@ class Users_mdl extends CI_Model{
 		return $data;
 	}
 	
+	//获取所有用户信息
+	public function get_users(){
+		return $this->db->get(self::TBL_USERS);
+	}
+	
+	//添加一个用户
+	public function add_user($data){
+		
+		//给密码加密,再用来传入数据库
+		$data['password'] = Common::do_hash($data['password']);
+		
+		//插入数据库
+		$this->db->insert(self::TBL_USERS,$data);
+		
+		//如果插入成功,返回TRUE
+		return ($this->db->affected_rows() > 0)? TRUE : FALSE;
+	}
+	
+	//删除一个用户
+	public function remove_user($uid){
+		$this->db->delete(self::TBL_USERS,array('uid' => intval($uid)));
+		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
+	}
+	
 }
 
 
