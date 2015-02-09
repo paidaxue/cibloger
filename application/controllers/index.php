@@ -9,7 +9,7 @@ class Index extends CI_Controller{
 	}
 	
 	public function index(){
-		echo "首页";
+		echo "首页s";
 	}
 }
 

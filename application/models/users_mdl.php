@@ -60,6 +60,20 @@ class Users_mdl extends CI_Model{
 		return ($this->db->affected_rows()>0)?TRUE:FALSE;
 	}
 	
+	//获取单个用户信息
+	public function get_user_by_id($uid){
+		
+		$data = array();
+		
+		$this->db->select('*')->from(self::TBL_USERS)->where('uid',$uid)->limit(1);
+		$query = $this->db->get();
+		if($query->num_rows() == 1){
+			$data = $query->row_array();
+		}
+		$query->free_result();
+		return $data;
+	}
+	
 }
 
 

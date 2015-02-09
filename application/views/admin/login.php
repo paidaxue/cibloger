@@ -2,8 +2,8 @@
 <?php $this->load->view('admin/header');?>
 
 <div>
-
-<?php echo form_open('admin/login'); ?>
+<?php $this->load->view('admin/notify'); ?>
+<?php echo form_open('admin/login?ref='.urlencode($this->referrer),array('name'=>'login')); ?>
 
 <ul><?php echo validation_errors(); ?> </ul>
 <p><label for="name">用户名:</label><input type="text" id="name" name="name" class="text" /></p>

@@ -22,14 +22,32 @@ class Login extends CI_Controller{
 		//加载自定义的common类
 		$this->load->library('common');
 		
+		//检查referrer,防止url注入
+		$this->_check_referrer();
+		
+	}
+	
+	//检查referrer,防止url注入
+	private function _check_referrer(){
+		$ref = $this->input->get('ref',TRUE);
+		/**登录页面提交的表单,如果$ref的值不为空,就把值赋给$this->referrer,如果为空,把/admin/dashboard赋值给$this->referrer
+		 * 一般正常为空
+		 * $this->referrer是登录后跳转的页面
+		 *
+		 * */
+		$this->referrer = (!empty($ref)) ? $ref : '/admin/dashboard';
+		
 	}
 	
 	public function index(){
 		
 		//检查是否已经登录,如果已经登录,那么就跳转到后台
-	/* 	if($this->auth->hasLogin()){
+		//如果之前已经登录了,会$this->_hasLogin = TRUE;
+		//$this->auth->hasLogin()返回的信息是TRUE/FALSE
+		if($this->auth->hasLogin()){
+		
 			redirect($this->referrer);
-		} */
+		}  
 		
 		
 		//前端验证输入的用户名密码
@@ -49,14 +67,15 @@ class Login extends CI_Controller{
 						$this->input->post('name',TRUE),
 						$this->input->post('password',TRUE)
 					);	
+			//print_r($user);
 			//如果登录信息正确
 			if(!empty($user)){
 				
-				//process_login()处理登录信息,如果正确,更新登录信息
+				//process_login()处理登录信息,如果正确,更新登录信息,并且在auth类中设置$this->_hasLogin = TRUE;
+				//表示已经登录
 				if($this->auth->process_login($user)){
-					//跳转
-					//redirect($this->referrer);
-					$this->load->view('admin/admin');
+					//print_r("SS");
+					redirect($this->referrer);
 				}
 				
 			}	
@@ -66,17 +85,16 @@ class Login extends CI_Controller{
 				//先休眠3秒,可以稍微防止一下爆破
 				sleep(3);
 				
-				$this->session->setflashdata('login_error','TRUE');
+				$this->session->set_flashdata('login_error','TRUE');
 				$this->_data['login_error_msg'] = '用户名或密码无效';
 				$this->load->view('admin/login',$this->_data);
 			}
 			
 		}
-		
-		
 
 	}
 	
+
 } 
 
 /*
