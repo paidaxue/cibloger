@@ -6,6 +6,13 @@
 </ul>
 
 <ul>
+	文章及分类管理
+	<ui><?php echo anchor(site_url('admin/metas/manage/'),'标签和分类',array('title'=>'标签和分类'));?></ui>
+	
+</ul>
+
+
+<ul>
 	<li>欢迎, <?php 
 				echo anchor(site_url('admin/profile/'),$this->user->name,array('class'=>'author important'));?>||
 	</li>
