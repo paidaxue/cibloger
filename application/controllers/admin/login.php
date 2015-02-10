@@ -94,7 +94,10 @@ class Login extends CI_Controller{
 
 	}
 	
-
+	//用户登出
+	public function logout(){
+		$this->auth->process_logout();
+	}
 } 
 
 /*

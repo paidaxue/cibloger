@@ -118,6 +118,12 @@ class Auth{
 		show_error('禁止访问,你的权限不足');
 		return;
 	}
+
+	//用户登出
+	public function process_logout(){
+		$this->_CI->session->sess_destroy();
+		redirect('admin/login');
+	}
 	
 }
 
