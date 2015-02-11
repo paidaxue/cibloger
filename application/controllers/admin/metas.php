@@ -102,7 +102,7 @@ class Metas extends ST_Auth_Controller{
 				$this->session->set_flashdata('success',$this->_map[$type].'更新成功');
 			}
 			
-			redirect('admin/metas/manage');
+			redirect('admin/metas/manage/'.$this->_type);
 			
 		}
 	}
@@ -110,6 +110,7 @@ class Metas extends ST_Auth_Controller{
 
 	//操作分发:删除,刷新,合并metas
 	public function operate($type,$mid,$do){
+		$this->_type = $type;
 		switch($do){
 			case 'delete':
 				$this->_remove($type,$mid);
@@ -131,7 +132,7 @@ class Metas extends ST_Auth_Controller{
 		$msg = $res ? $this->_map[$type].'删除成功':$this->_map[$type].'没有被删除';
 		$notify = $res ? 'success':'error';
 		
-		redirect('admin/metas/manage');
+		redirect('admin/metas/manage/'.$this->_type);
 		
 	}
 	

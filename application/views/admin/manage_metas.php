@@ -9,7 +9,7 @@ $this->load->view('admin/menu');
 
 <?php if('category' == $type):?>
 
-<form method="post" action="<?php echo site_url('admin/metas/operate/'.$type); ?>">
+<form method="post" action="">
 <table>
 
 	<thead>
@@ -54,11 +54,60 @@ $this->load->view('admin/menu');
 	</tbody>
 	
 </form>
-<?php else:?>
-标签
-面板
 
+
+
+
+
+
+
+<?php else:?>
+<form method="post" action="">
+<table>
+
+	<thead>
+		<tr>
+			<th>标签名称</th>
+			<th></th>
+			<th>url缩略名</th>
+			<th>文章数</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<?php if($tag->num_rows() > 0): ?>
+			
+			<?php foreach($tag->result() as $t): ?>
+			
+			<tr>
+				<th><?php echo anchor('admin/metas/manage/tag/'.$t->mid,$t->name);?></th>
+				<th></th>
+				<th><?php echo $t->slug; ?></th>
+				<th>文章数</th>
+				<th><?php echo anchor('admin/metas/operate/'.$type.'/'.$t->mid.'/delete','删除');?>		</th>
+			</tr>
+
+		
+			
+			<?php endforeach; ?>
+		
+		<?php else: ?>
+			<tr>
+				<td>没有任何标签</td>
+			</tr>
+		
+		<?php endif;?>
+	</tbody>
+</form>
 <?php endif; ?>
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
