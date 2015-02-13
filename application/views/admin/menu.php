@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
 
-
+<div>
 <ul>
 <ui><?php echo anchor(site_url('admin/users/manage/'),'用户',array('title'=>'用户'));?></ui>
 </ul>
@@ -9,6 +9,12 @@
 	文章及分类管理
 	<ui><?php echo anchor(site_url('admin/metas/manage/'),'标签和分类',array('title'=>'标签和分类'));?></ui>
 	
+</ul>
+
+<ul>
+	<li>
+		<?php echo anchor(site_url('admin/posts/write'),'写新文章',array('title'=>'写新文章'));?>
+	</li>
 </ul>
 
 
@@ -22,3 +28,5 @@
 	</li>
 
 </ul>
+</div>
+<br/><br/>
