@@ -13,6 +13,9 @@
 
 <ul>
 	<li>
+		<?php echo anchor(site_url('admin/posts/manage'),'文章管理',array('title'=>'文章管理'));?>
+	</li>
+	<li>
 		<?php echo anchor(site_url('admin/posts/write'),'写新文章',array('title'=>'写新文章'));?>
 	</li>
 </ul>

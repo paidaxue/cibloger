@@ -85,6 +85,91 @@ class Common{
 		return $result;
 	}
 	
+	//把时间变成文字格式
+	public static function dateWord($from, $now){
+		
+		//如果不是同一年
+		if(idate('Y',$now) != idate('Y',$from)){
+			return date('Y年m月d日',$from);
+		}
+		
+		//操作同一年的日期
+		$seconds = $now - $from;
+		$days = idate('z',$now) - idate('z',$from);
+		
+		//如果是同一天
+		if($days == 0){
+			//如果是同一个小时
+			if($seconds < 3600){
+				
+				//如果是同一分钟内
+				if($seconds < 60){
+					
+					if( 10 > $seconds){
+						return '刚刚';
+					}else{
+						return sprintf('%d秒前',$seconds);
+					}
+					
+					return sprintf('%d分钟前',intval($seconds / 60));
+				}
+				return sprintf('%d小时前',idate('H',$now) - idate('H',$from));
+			}
+			
+		}
+		
+		//如果是昨天
+		if($days == 1){
+			return sprintf('昨天%s',date('H:i',$from));
+		}
+		
+		//如果是前天
+		if($days == 2){
+			return sprintf('前天%s',date('H:i',$from));
+		}
+		
+		//如果是7天内
+		if($days < 7){
+			return sprintf('%d天前',$days);
+		}
+		
+		//一周以前
+		return date('n月j日',$from);
+		
+	}
+	
+	
+	/**
+	 * 格式化metas输出
+	 *
+	 * @access public
+	 * @param array - $metas metas内容数组
+	 * @param string - $split 分割符
+	 * @param boolean - $link 是否输出连接
+	 * @return string - 格式化输出
+	 */
+	public static function format_metas($metas = array(), $split = ',', $link = true)
+	{
+	
+		$format = '';
+		 
+		if ($metas)
+		{
+			$result = array();
+	
+			foreach ($metas as $meta)
+			{
+				$result[] = $link ? '<a href="' . site_url($meta['type'].'/'.$meta['slug']) . '">'
+						. $meta['name'] . '</a>' : $meta['name'];
+			}
+	
+			$format = implode($split, $result);
+		}
+	
+		return $format;
+	}
+	
+	
 }
 
 /*

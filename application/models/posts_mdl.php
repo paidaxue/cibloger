@@ -66,14 +66,14 @@ class Posts_mdl extends CI_Model{
 		$this->db->join('users','users.uid=posts.authorId');
 		
 		//如果参数$type在数组$this->_post_type里面
-		if(in_array($type,$this->_post_type)){
+		if($type && in_array($type,$this->_post_type)){
 			
 			//从posts表中选出对应类型的记录,例如,传入的是$type=post,那么就是选出post类型的所有记录
 			$this->db->where('posts.type',$type);
 		}
 		
 		//如果参数$status是在数组$this->_post_status里面
-		if(in_array($status,$this->_post_status)){
+		if($status && in_array($status,$this->_post_status)){
 			
 			//从posts表中选出对应状态的记录,例如,传入的$status=publish,那么就选出publish状态的所有记录
 			$this->db->where('posts.status',$status);

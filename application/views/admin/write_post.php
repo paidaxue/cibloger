@@ -16,7 +16,7 @@ $this->load->view('admin/menu');
 	<textarea rows="10" cols="8" name="text"><?php echo set_value('text',(isset($text))?$text:''); ?></textarea>
 	
 	<label for="tags">标签</label>
-	<input name="tags" type="text" value="<?php echo set_value('tags',(isset($tags))?htmlspecialchars_decode($tages):''); ?>" />
+	<input name="tags" type="text" value="<?php echo set_value('tags',(isset($tags))?htmlspecialchars_decode($tags):''); ?>" />
 
 </div>
 <div>

@@ -254,6 +254,18 @@ class Metas_mdl extends CI_Model{
 		return is_array($inputTags) ? $result : current($result);
 	}
 	
+	
+	//计算metas个数
+	public function count_metas($type = 'category'){
+		
+		if(in_array($type,$this->_type)){
+			$this->db->where(self::TBL_METAS.'.type',$type);
+		}
+		
+		return $this->db->count_all_results(self::TBL_METAS);
+		
+	}
+	
 }
 
 /*

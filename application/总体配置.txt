@@ -1,4 +1,4 @@
-$autoload['libraries'] = array('session');
+$autoload['libraries'] = array('session','dpagination');	stats常用统计类	
 $autoload['helper'] = array('url','date','file');
 
 config.php
