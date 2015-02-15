@@ -73,6 +73,41 @@ class Plugin{
 		//log_message('debug', "$hook Registered: $key");
 	}
 	
+	/**
+	 * 触发一个钩子
+	 *
+	 *	e.g.: $this->plugin->trigger('hook_name'[, arg1, arg2, arg3...]);
+	 *
+	 *
+	 * @param string $hook 钩子的名称
+	 * @param mixed $data 钩子的入参
+	 * @return mixed
+	 */
+	public function trigger($hook)
+	{
+		$result = '';
+	
+		if($this->check_hook_exist($hook))
+		{
+			foreach ($this->_listeners[$hook] as $listener)
+			{
+				$class  = & $listener[0];
+				$method = $listener[1];
+	
+				if(method_exists($class, $method))
+				{
+					$args = array_slice(func_get_args(), 1);
+						
+					$result = call_user_func_array(array($class, $method), $args);
+				}
+			}
+		}
+	
+		log_message('debug', "Hook Triggerred: $hook");
+	
+		return $result;
+	}
+	
 }
 
 

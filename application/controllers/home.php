@@ -113,6 +113,9 @@ class Home extends ST_Controller{
 			//文章摘要
 			$post->excerpt = Common::get_excerpt($post->text);
 			
+			/** 是否存在摘要 */
+			$post->more = (Common::has_break($post->text)) ? TRUE : FALSE;
+			
 			unset($post->slug);
 			unset($post->text);
 			
@@ -155,6 +158,44 @@ class Home extends ST_Controller{
 			$this->_pagination = $this->dpagination->getOutput();
 		}
 	}
+
+	
+	//搜索功能
+	public function search(){
+		//输入的关键词
+		$keywords = strip_tags($this->input->get('s',TRUE));
+		$page = strip_tags($this->input->get('p',TRUE));
+		
+		$this->_init_pagination($page);
+		
+		$this->_posts = $this->posts_mdl
+		->get_posts('post', 'publish', NULL, $this->_limit, $this->_offset, 0, $keywords, TRUE)
+		->result();
+		
+		$this->_total_count = $this->posts_mdl
+		->get_posts('post', 'publish', NULL, 10000, 0, 0, $keywords, TRUE)
+		->num_rows();
+			
+		if(!empty($this->_posts))
+		{
+			$this->_prepare_posts();
+		
+			$this->_apply_pagination(site_url('search?s='. urlencode($keywords)), FALSE, 'p');
+		}
+		
+		/** 页面初始化 */
+		$data['page_title'] = sprintf('搜索：%s', $keywords);
+		$data['page_description'] = setting_item('blog_description');
+		$data['page_keywords'] = setting_item('blog_keywords');
+		$data['posts'] = $this->_posts;
+		$data['parsed_feed'] = Common::render_feed_meta();
+		$data['current_view_hints'] = sprintf('关键字 %s 的搜索结果（第 %d 页 / 共 %d 篇）', $keywords, $this->_current_page, $this->_total_count);
+		$data['pagination'] = $this->_pagination;
+		
+		$this->load_theme_view('index', $data);
+		
+	}
+	
 	
 }
 
