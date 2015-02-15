@@ -10,7 +10,7 @@
 		<h4>
 			<span>发布于:<?php echo $post->published; ?></span>
 			<span>分类:<?php echo Common::format_metas($post->categories,','); ?></span>
-			<span>作者:<?php echo anchor(site_url('author/'.$post->authorId),$post->screenName); ?></span>
+			<span>作者:<?php echo anchor(site_url('authors/'.$post->authorId),$post->screenName); ?></span>
 			<span><?php echo anchor($post->permalink.'#comments',$post->commentsNum.'个评论'); ?></span>
 		</h4>
 		

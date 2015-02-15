@@ -45,6 +45,7 @@ $route['category/(:any)'] = 'home/category/$1';		//把url中index.php/category	�
 $route['search'] = 'home/search';
 $route['posts/(:any)'] = 'posts/index/$1';		//在第二个字段中的通配符(:any),,匹配控制器的$1
 $route['authors/(:any)'] = 'home/authors/$1';		//根据作者得到文章
+$route['tag/(:any)'] = 'home/tag/$1';
 
 
 /* End of file routes.php */

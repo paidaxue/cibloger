@@ -248,6 +248,108 @@ class Home extends ST_Controller{
 	}
 	
 	
+	/**
+	 * 按作者显示日志
+	 *
+	 * @access public
+	 * @param  int  $uid
+	 * @param  string  $page  页码
+	 * @return void
+	 */
+	public function authors($uid, $page = 1)
+	{
+		if(empty($uid) || !is_numeric($uid) || !is_numeric($page))
+		{
+			redirect(site_url());
+		}
+	
+		/** 分页参数 */
+		$this->_init_pagination($page);
+	
+		$uid = intval($uid);
+		$author = NULL;
+	
+		$this->_posts = $this->posts_mdl
+		->get_posts_by_author($uid, 'post', 'publish', $this->_limit, $this->_offset)
+		->result();
+		$this->_total_count = $this->posts_mdl
+		->get_posts_by_author($uid, 'post', 'publish', 10000, 0)
+		->num_rows();
+	
+		if(!empty($this->_posts))
+		{
+			$this->_prepare_posts();
+				
+			list($temp) = $this->_posts;
+			$author = $temp->screenName;
+			unset($temp);
+				
+			$this->_apply_pagination(site_url('authors/' . $uid) . '/%');
+		}
+	
+		/** 页面初始化 */
+		$data['page_title'] = $author;
+		$data['page_description'] = setting_item('blog_description');
+		$data['page_keywords'] = setting_item('blog_keywords');
+		$data['posts'] = $this->_posts;
+		$data['parsed_feed'] = Common::render_feed_meta();
+		$data['current_view_hints'] = sprintf('%s 所写的文章（第 %d 页 / 共 %d 篇）', $author, $this->_current_page, $this->_total_count);
+		$data['pagination'] = $this->_pagination;
+	
+		$this->load_theme_view('index', $data);
+	}
+	
+	
+	/**
+	 * 分类浏览
+	 *
+	 * @access public
+	 * @param  string $slug
+	 * @param  int    $page
+	 * @return void
+	 */
+	public function tag($slug, $page = 1)
+	{
+		if(empty($slug) || !is_numeric($page))
+		{
+			redirect(site_url());
+		}
+	
+		$tag = $this->metas_mdl->get_meta_by_slug(trim($slug));
+	
+		if(!$tag)
+		{
+			show_error('标签不存在或已被主人删除');
+			exit();
+		}
+	
+		/** 分页参数 */
+		$this->_init_pagination($page);
+	
+		$this->_posts = $this->posts_mdl->get_posts_by_meta($slug, 'tag', 'post', 'publish', 'posts.*', $this->_limit, $this->_offset)->result();
+		$this->_total_count = $this->posts_mdl->get_posts_by_meta($slug, 'tag', 'post', 'publish', 'posts.*', 10000, 0)->num_rows();
+	
+		if(!empty($this->_posts))
+		{
+			$this->_prepare_posts();
+				
+			$this->_apply_pagination(site_url('tag/' . $slug) . '/%');
+		}
+	
+		/** 页面初始化 */
+		$data['page_title'] = $tag->name;
+		$data['page_description'] = $tag->description;
+		$data['page_keywords'] = setting_item('blog_keywords');
+		$data['posts'] = $this->_posts;
+		$data['parsed_feed'] = Common::render_feed_meta('tag', $tag->slug, $tag->name);
+		$data['current_view_hints'] = sprintf('标记有标签 %s 的文章（第 %d 页 / 共 %d 篇）', $tag->name, $this->_current_page, $this->_total_count);
+		$data['pagination'] = $this->_pagination;
+	
+		$this->load_theme_view('index', $data);
+	
+	}
+	
+	
 }
 
 /*

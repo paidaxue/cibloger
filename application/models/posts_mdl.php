@@ -201,6 +201,52 @@ class Posts_mdl extends CI_Model{
 		return $this->db->get();
 	}
 	
+	/**
+	 * 根据作者ID获取文章
+	 *
+	 * @access public
+	 * @param int 		$uid
+	 * @param string 	$type
+	 * @param string 	$status
+	 * @param int 		$limit
+	 * @param int 		$offset
+	 * @return array - 内容信息
+	 */
+	public function get_posts_by_author($uid, $type = 'post', $status = 'publish', $limit = NULL, $offset = NULL)
+	{
+		$this->db->select('posts.* ,users.screenName');
+		$this->db->join('users','users.uid = posts.authorId');
+	
+		//uid
+		$this->db->where('posts.authorId', intval($uid));
+	
+		//type
+		if($type && in_array($type, $this->_post_type))
+		{
+			$this->db->where('posts.type', $type);
+		}
+	
+		//status
+		if($status && in_array($status,$this->_post_status))
+		{
+			$this->db->where('posts.status', $status);
+		}
+	
+		//limit
+		if($limit && is_numeric($limit))
+		{
+			$this->db->limit($limit);
+		}
+	
+		//offset
+		if($offset && is_numeric($offset))
+		{
+			$this->db->offset($offset);
+		}
+	
+		return $this->db->get(self::TBL_POSTS);
+	}
+	
 	
 	
 }
