@@ -156,6 +156,52 @@ class Posts_mdl extends CI_Model{
 	}
 	
 	
+	/**
+	 * 根据元数据获取内容
+	 *
+	 * @access public
+	 * @param string $meta_slug 	元数据缩略名
+	 * @param string $meta_type 	元数据类型：{"category"｜"tag"}
+	 * @param string $post_type 	内容类型
+	 * @param string $post_status 	内容状态
+	 * @param string $post_status 	要筛选的栏位值 (optional)
+	 * @param int    $limit 		条数 (optional)
+	 * @param int    $offset 		偏移量 (optional)
+	 * @param bool   $feed_filter	是否显示在feed里面 (optional)
+	 * @return array - 内容信息
+	 */
+	public function get_posts_by_meta($meta_slug, $meta_type = 'category', $post_type = 'post', $post_status = 'publish', $fields = 'posts.*', $limit = NULL, $offset = NULL, $feed_filter = FALSE)
+	{
+		$this->db->select($fields . ',users.screenName');
+		$this->db->from('posts,metas,relationships');
+		$this->db->join('users','users.uid = posts.authorId');
+		$this->db->where('posts.pid = relationships.pid');
+		$this->db->where('posts.type', $post_type);
+		$this->db->where('posts.status', $post_status);
+		$this->db->where('metas.mid = relationships.mid');
+		$this->db->where('metas.type',$meta_type);
+		$this->db->where('metas.slug',$meta_slug);
+		$this->db->order_by('posts.created','DESC');
+	
+		if($feed_filter)
+		{
+			$this->db->where('allowFeed', 1);
+		}
+	
+		if($limit && is_numeric($limit))
+		{
+			$this->db->limit(intval($limit));
+		}
+	
+		if($offset && is_numeric($offset))
+		{
+			$this->db->offset(intval($limit));
+		}
+	
+		return $this->db->get();
+	}
+	
+	
 	
 }
 

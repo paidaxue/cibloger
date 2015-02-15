@@ -197,6 +197,57 @@ class Home extends ST_Controller{
 	}
 	
 	
+	/**
+	 * 分类浏览
+	 *
+	 * @access public
+	 * @param  string $slug
+	 * @param  int    $page
+	 * @return void
+	 */
+	public function category($slug, $page = 1)
+	{	//如果参数$slug为空,并且参数$page不是数字
+		if(empty($slug) || !is_numeric($page))
+		{	//返回首页
+			redirect(site_url());
+		}
+	
+		//根据缩略名得到对应 分类信息
+		$category = $this->metas_mdl->get_meta_by_slug(trim($slug));
+		//如果不存在分类
+		if(!$category)
+		{
+			show_error('分类不存在或已被管理员删除');
+			exit();
+		}
+	
+		/** 分页参数 */
+		$this->_init_pagination($page);
+		//根据分类缩略名获取所有对应分类的文章
+		$this->_posts = $this->posts_mdl->get_posts_by_meta($slug, 'category', 'post', 'publish', 'posts.*', $this->_limit, $this->_offset)->result();
+		//得到对应分类的文章数量
+		$this->_total_count = $this->posts_mdl->get_posts_by_meta($slug, 'category', 'post', 'publish', 'posts.*', 10000, 0)->num_rows();
+	
+		if(!empty($this->_posts))
+		{
+			$this->_prepare_posts();
+				
+			$this->_apply_pagination(site_url('category/' . $slug) . '/%');
+		}
+	
+		/** 页面初始化 */
+		$data['page_title'] = $category->name;
+		$data['page_description'] = $category->description;
+		$data['page_keywords'] = setting_item('blog_keywords');
+		$data['posts'] = $this->_posts;
+		$data['parsed_feed'] = Common::render_feed_meta('category', $category->slug, $category->name);
+		$data['current_view_hints'] = sprintf('%s 分类下的文章（第 %d 页 / 共 %d 篇）', $category->name, $this->_current_page, $this->_total_count);
+		$data['pagination'] = $this->_pagination;
+	
+		$this->load_theme_view('index', $data);
+	}
+	
+	
 }
 
 /*

@@ -266,6 +266,20 @@ class Metas_mdl extends CI_Model{
 		
 	}
 	
+	/**
+	 * 根据缩略名获取meta信息
+	 *
+	 * @access public
+	 * @param array $meta_data  内容
+	 * @return object
+	 */
+	public function get_meta_by_slug($slug)
+	{
+		$this->db->where(self::TBL_METAS.'.slug', $slug);
+	
+		return $this->db->get(self::TBL_METAS)->row();
+	}
+	
 }
 
 /*

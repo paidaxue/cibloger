@@ -110,7 +110,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('posts_mdl','metas_mdl');
+$autoload['model'] = array('posts_mdl','metas_mdl','comments_mdl');
 
 
 /* End of file autoload.php */
