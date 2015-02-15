@@ -19,7 +19,11 @@ define('DIR_READ_MODE', 0755);
 define('DIR_WRITE_MODE', 0777);
 
 define('ST_SALT_LENGTH', 9);
-
+define('ST_CONTENT_BREAK', 							'[--break--]');		//分隔符标记
+define('ST_CORE_HOOK_EDITOR',						'Core::Editor');
+define('ST_THEMES_DIR', 							'themes');		//主题路径
+define('ST_DB_CACHE_DIR', 							'dbcache');		//缓存存储路径
+define('ST_PLUGINS_DIR', 							'st_plugins');	//插件的文件夹
 /*
 |--------------------------------------------------------------------------
 | File Stream Modes
