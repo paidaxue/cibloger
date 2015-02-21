@@ -19,10 +19,11 @@ class ST_Controller extends CI_Controller{
 		//$this->load->library('common');
 		
 		//设置当前使用的主题皮肤
-		$this->load->theme = setting_item('current_theme');
+		//$this->load->theme = setting_item('current_theme');
+		$this->load->switch_theme_off();
 		
 		//前台页面均使用主题皮肤功能
-		$this->load->switch_theme_on();
+		//$this->load->switch_theme_on();
 		
 	}
 	

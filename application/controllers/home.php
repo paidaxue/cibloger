@@ -66,7 +66,7 @@ class Home extends ST_Controller{
 		$data['pagination'] = $this->_pagination;
 		
 		/** 加载主题下的页面 */
-		$this->load_theme_view('index', $data);
+		$this->load->view('index', $data);
 		
 	}
 	
@@ -192,7 +192,7 @@ class Home extends ST_Controller{
 		$data['current_view_hints'] = sprintf('关键字 %s 的搜索结果（第 %d 页 / 共 %d 篇）', $keywords, $this->_current_page, $this->_total_count);
 		$data['pagination'] = $this->_pagination;
 		
-		$this->load_theme_view('index', $data);
+		$this->load->view('index', $data);
 		
 	}
 	
@@ -244,7 +244,7 @@ class Home extends ST_Controller{
 		$data['current_view_hints'] = sprintf('%s 分类下的文章（第 %d 页 / 共 %d 篇）', $category->name, $this->_current_page, $this->_total_count);
 		$data['pagination'] = $this->_pagination;
 	
-		$this->load_theme_view('index', $data);
+		$this->load->view('index', $data);
 	}
 	
 	
@@ -296,7 +296,7 @@ class Home extends ST_Controller{
 		$data['current_view_hints'] = sprintf('%s 所写的文章（第 %d 页 / 共 %d 篇）', $author, $this->_current_page, $this->_total_count);
 		$data['pagination'] = $this->_pagination;
 	
-		$this->load_theme_view('index', $data);
+		$this->load->view('index', $data);
 	}
 	
 	
@@ -345,7 +345,7 @@ class Home extends ST_Controller{
 		$data['current_view_hints'] = sprintf('标记有标签 %s 的文章（第 %d 页 / 共 %d 篇）', $tag->name, $this->_current_page, $this->_total_count);
 		$data['pagination'] = $this->_pagination;
 	
-		$this->load_theme_view('index', $data);
+		$this->load->view('index', $data);
 	
 	}
 	

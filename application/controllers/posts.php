@@ -44,7 +44,7 @@ class Posts extends ST_Controller{
 		$data['post'] = $post;
 		$data['comments'] = $comments;
 		
-		$this->load_theme_view('post', $data);
+		$this->load->view('post', $data);
 		
 	}
 	
