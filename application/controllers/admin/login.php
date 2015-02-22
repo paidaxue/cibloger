@@ -51,9 +51,18 @@ class Login extends CI_Controller{
 		
 		
 		//前端验证输入的用户名密码
-		$this->form_validation->set_rules('name','用户名','required');
-		$this->form_validation->set_rules('password','密码','required');
-		$this->form_validation->set_error_delimiters('<li>','</li>');
+		//用户名及密码规则:
+		//用户名:去掉首位空格,不为空,长度4到12位,只能是英文和数字,处理有害数据
+		$this->form_validation->set_rules('name','用户名','trim|required|min_length[4]|max_length[12]|alpha_numeric|xss_clean');
+		$this->form_validation->set_rules('password','密码','trim|required|xss_clean');
+		//$this->form_validation->set_error_delimiters('<li>','</li>');
+		$this->form_validation->set_message('required', '用户名和密码必须填写');
+		$this->form_validation->set_message('min_length', '用户名必须4到12位之间');
+		$this->form_validation->set_message('max_length', '用户名必须4到12位之间');
+		$this->form_validation->set_message('alpha_numeric', '用户名只能是数字和字母');
+		//加载错误信息的界定符
+		$this->form_validation->set_error_delimiters('<p class="error-text">', '</p>');
+		
 		
 		//如果不通过,回到登录页面
 		if($this->form_validation->run() == FALSE){
@@ -86,7 +95,7 @@ class Login extends CI_Controller{
 				sleep(3);
 				
 				$this->session->set_flashdata('login_error','TRUE');
-				$this->_data['login_error_msg'] = '用户名或密码无效';
+				$this->_data['login_error_msg'] = '用户名或密码错误';
 				$this->load->view('admin/login',$this->_data);
 			}
 			
