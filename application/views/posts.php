@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
-
+<div class="col-md-9">
 <?php if(isset($current_view_hints)): ?>
 	<strong>正在查看:</strong><?php echo $current_view_hints; ?>
 <?php endif; ?>
@@ -36,3 +36,5 @@
 <?php if(isset($pagination)):?>
 	<?php echo $pagination;?>
 <?php endif;?>
+
+</div>

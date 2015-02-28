@@ -2,16 +2,14 @@
 $this->load->view('admin/header');
 $this->load->view('admin/menu');
 ?>
+<div class="container">
+<div class="col-md-offset-2">
 
-<div>
-	<div>
-		<ul>
-			<li <?php if('publish' == $status): ?> class="current" <?php endif; ?> >
-				<?php echo anchor('admin/posts/manage'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):''),'已发布'); ?>
-			</li>
-			
-			<li <?php if('draft' == $status): ?> class="current" <?php endif; ?> >
-				<a href="<?php echo site_url('admin/posts/manage/draft'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):'')); ?>" >草稿
+  <div class="btn-group btn-group-md">
+    <button type="button" class="btn btn-default <?php if('publish' == $status): ?> active <?php endif; ?>"><?php echo anchor('admin/posts/manage'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):''),'已发布'); ?></button>
+    <button type="button" class="btn btn-default <?php if('draft' == $status): ?> active <?php endif; ?>">
+    
+    <a href="<?php echo site_url('admin/posts/manage/draft'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):'')); ?>" >草稿
 				<?php if('on' !== $this->session->userdata('__all_posts') && !isset($author_id) && ($my_draft_num = $this->stats->count_posts('post','draft',$this->user->uid)) > 0): ?>
 					<?php echo $my_draft_num ?>
 				
@@ -22,11 +20,12 @@ $this->load->view('admin/menu');
 					<?php $author_draft_num; ?>
 				
 				<?php endif; ?>
-				</a>
-			</li>
-			
-			<li <?php if('waiting' ==$status): ?> class="current" <?php endif; ?> >
-				<a href="<?php echo site_url('admin/posts/manage/waiting'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):'')); ?>" >待审核
+	</a>
+    </button>
+    
+    
+    <button type="button" class="btn btn-default <?php if('waiting' ==$status): ?> active <?php endif; ?>">
+    <a href="<?php echo site_url('admin/posts/manage/waiting'.(isset($author_id)?'?author='.$this->input->get('author',TRUE):'')); ?>" >待审核
 					<?php if('on' !== $this->session->userdata('__all_posts') && !isset($author_id) && ($my_waiting_num = $this->stats->count_posts('post','waiting',$this->user->uid))>0): ?>
 						<?php echo $my_waiting_num; ?>
 					<?php elseif('on' == $this->session->userdata('_all_posts') && !isset($author_id) && ($all_waiting_num = $this->stats->count_posts('post','waiting',NULL))>0): ?>
@@ -34,19 +33,27 @@ $this->load->view('admin/menu');
 					<?php elseif('on' !== $this->session->userdata('__all_posts') && isset($author_id) && ($author_waiting_num = $this->stats->count_posts('post','waiting',$author_id))>0): ?>
 						<?php echo $author_waiting_num; ?>
 					<?php endif; ?>
-				</a>
-			</li>	
-			<?php if($this->auth->exceed('editor',TRUE) && !isset($author_id)): ?>
-				<li class="right<?php if('on' == $this->session->userdata('__all_posts')): ?> current<?php endif; ?>"><?php echo anchor("admin/posts/manage/$status?__all_posts=on",'所有'); ?></li>
-				<li class="right<?php if('on' !== $this->session->userdata('__all_posts')): ?> current<?php endif; ?>"><?php echo anchor("admin/posts/manage/$status?__all_posts=off",'我发布的'); ?></li>
-				
-			<?php endif; ?>
-		</ul>
-	</div>
-</div>
+	</a>
+    </button>
+  </div>
+  
+  <div class="btn-group btn-group-md pull-right">
+    <button type="button" class="btn btn-default <?php if('on' == $this->session->userdata('__all_posts')): ?> adtive<?php endif; ?>">
+      <?php echo anchor("admin/posts/manage/$status?__all_posts=on",'所有'); ?>
+    </button>
+    <button type="button" class="btn btn-default <?php if('on' !== $this->session->userdata('__all_posts')): ?> adtive<?php endif; ?>">
+      <?php echo anchor("admin/posts/manage/$status?__all_posts=off",'我发布的'); ?>
+    </button>
+  </div>
 
-<form method="post" name="manage_posts" action="<?php echo site_url('admin/posts/operate'); ?>">
-<table>
+</div>
+</div>
+<br>
+
+<div class="container">
+<div class="col-md-offset-2">
+<form role="form" method="post" name="manage_posts" action="<?php echo site_url('admin/posts/operate'); ?>">
+<table class="table table-striped table-bordered table-hover">
 	<thend>
 		<th>选中</th>
 		<th>评论数</th>
@@ -91,5 +98,13 @@ $this->load->view('admin/menu');
 </table>
 
 </form>
+</div>
+</div>
 
+<div class="container">
+<div class="col-md-offset-6">
 <?php echo isset($pagination)?$pagination:''; ?>
+</div>
+</div>
+
+<?php echo $this->load->view('admin/footer');?>

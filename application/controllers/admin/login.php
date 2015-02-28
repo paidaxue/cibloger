@@ -70,7 +70,35 @@ class Login extends CI_Controller{
 			$this->load->view('admin/login',$this->_data);
 		}
 		else{
-			//数据库验证登录,如果正确,那么得到用户信息,如果错误,返回FALSE
+			
+			if(($user = $this->users->get_by_username($this->input->post('name',TRUE)))!=0){
+				
+				if($this->users->check_password(
+						$this->input->post('password',TRUE),
+						$user['password']
+						)){
+					if($this->auth->process_login($user)){
+						//print_r("SS");
+						redirect($this->referrer);
+					}
+				}else{
+					sleep(3);
+					$this->session->set_flashdata('login_error','TRUE');
+					//$this->_data['login_error'] = '密码错误';
+					//$this->session->set_flashdata('login_error','登陆密码错误');
+					$this->_data['login_error_msg'] = '登陆密码错误';
+				}
+				
+			}else{
+				sleep(3);
+				$this->session->set_flashdata('login_error','TRUE');
+				//$this->_data['login_error'] = '用户名不存在';
+				//$this->session->set_flashdata('login_error','用户名不存在');
+				$this->_data['login_error_msg'] = '用户名不存在';
+			}
+			
+			$this->load->view('admin/login',$this->_data);
+			/* //数据库验证登录,如果正确,那么得到用户信息,如果错误,返回FALSE
 			$user = $this->users->validate_user(
 						//第二个参数是可选的，如果想让取得的数据经过跨站脚本过滤（XSS Filtering），把第二个参数设为TRUE。
 						$this->input->post('name',TRUE),
@@ -97,7 +125,7 @@ class Login extends CI_Controller{
 				$this->session->set_flashdata('login_error','TRUE');
 				$this->_data['login_error_msg'] = '用户名或密码错误';
 				$this->load->view('admin/login',$this->_data);
-			}
+			} */
 			
 		}
 

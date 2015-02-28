@@ -394,7 +394,8 @@ class Posts extends ST_Auth_Controller{
 		
 		//从数据库中得到登录作者的uid
 		$author_id = $this->user->uid;
-		//如果具有编辑以上权限,可以查看所有文章,否则只能查看自己文章
+		
+		//如果具有编辑以上权限才能进入编辑管理
 		if($this->auth->exceed('editor',TRUE)){
 			//得到表单提交的作者名
 			$author = $this->input->get('author',TRUE);
@@ -471,7 +472,8 @@ class Posts extends ST_Auth_Controller{
 				redirect('admin/posts/manage');
 			}
 			
-			//得到文章
+			//下面部分是没有传任何参数时,显示所有的文章
+			//得到文章,默认:$status=publish;$author_id=$this->user->uid;$limit=10;$offset=0;$category_filter=0;
 			$posts = $this->posts_mdl->get_posts('post',$status,$author_id,$limit,$offset,$category_filter,$title_filter);
 			//计算文章数量
 			$posts_count = $this->posts_mdl->get_posts('post',$status,$author_id,10000,0,$category_filter,$title_filter)->num_rows();
@@ -486,12 +488,12 @@ class Posts extends ST_Auth_Controller{
 				
 				if($posts_count > $limit){
 					
-					$this->dpagination->currentPage($page);
-					$this->dpagination->items($posts_count);
-					$this->dpagination->limit($limit);
-					$this->dpagination->adjacents(5);
+					$this->dpagination->currentPage($page);			//当前是第几页
+					$this->dpagination->items($posts_count);		//当前文章中暑
+					$this->dpagination->limit($limit);				//每页文章数
+					$this->dpagination->adjacents(5);				//总共的页数
 					$this->dpagination->target(site_url('admin/posts/manage?'.implode('&',$query)));
-					$this->dpagination->parameterName('p');
+					$this->dpagination->parameterName('p');			//页面的前缀,例如:p=2	如果换成psss,就是psss=2
 					$this->dpagination->nextLabel('下一页');
 					$this->dpagination->PrevLabel('上一页');
 					
@@ -657,40 +659,9 @@ class Posts extends ST_Auth_Controller{
 			redirect('admin/posts/manage');
 		}
 	}
-	
-	
-	
-	
+
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 End of file

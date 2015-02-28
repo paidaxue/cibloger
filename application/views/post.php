@@ -3,7 +3,7 @@
 $this->load->view('header');
 ?>
 
-<div>
+<div class="col-md-9">
 	
 	<h3><?php echo $post->title; ?></h3>
 	

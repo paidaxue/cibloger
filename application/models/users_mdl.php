@@ -44,6 +44,23 @@ class Users_mdl extends CI_Model{
 		return $data;
 	}
 	
+	//对validate_user方法拆分:get_by_username判断用户是否存在		check_password:判断密码是否错误
+	public function get_by_username($username){
+		$this->db->where('name',$username);
+		$query = $this->db->get(self::TBL_USERS);
+		
+		if($query->num_rows() == 1){
+			return $query->row_array();
+		}
+		return false;
+	}
+	
+	public function check_password($password,$hashed_password){
+		$is_password = '';
+		$is_password = (Common::hash_Validate($password,$hashed_password)) ? TRUE:FALSE;
+		return $is_password;
+	}
+	
 	//修改用户信息
 	public function update_user($uid,$data,$hashed = TRUE){
 		

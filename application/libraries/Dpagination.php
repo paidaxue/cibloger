@@ -34,7 +34,7 @@ class Dpagination{
 	#Page to sent the page value
 	function target($value){$this->target = $value;}
 	
-	#Current page
+	#当前是第几页
 	function currentPage($value){$this->page = (int) $value;}
 	
 	#How many adjacent pages should be shown on each side of the current page?
@@ -56,7 +56,7 @@ class Dpagination{
 	
 	#to change urlFriendly
 	function urlFriendly($value="%"){
-		if(eregi('^ *$',$value)){
+		if(@eregi('^ *$',$value)){
 			$this->urlF=false;
 			return false;
 		}
@@ -69,12 +69,12 @@ class Dpagination{
 	function show(){
 		if(!$this->calculate)
 			if($this->calculate())
-				echo "<div class=\"$this->className\">$this->pagination</div>\n";
+				echo "<ul class=\"$this->className\">$this->pagination</ul>\n";
 	}
 	function getOutput(){
 		if(!$this->calculate)
 			if($this->calculate())
-				return "<div class=\"$this->className\">$this->pagination</div>\n";
+				return "<ul class=\"$this->className\">$this->pagination</ul>\n";
 	}
 	function get_pagenum_link($id){
 		if(strpos($this->target,'?')===false)
@@ -133,17 +133,17 @@ class Dpagination{
 			if($this->page){
 				//anterior button
 				if($this->page > 1)
-					$this->pagination .= "<a href=\"".$this->get_pagenum_link($prev)."\" class=\"prev\">$p</a>";
+					$this->pagination .= "<li class=\"prev\"><a href=\"".$this->get_pagenum_link($prev)."\" >$p</a></li>";
 				else
-					$this->pagination .= "<span class=\"disabled\">$p</span>";
+					$this->pagination .= "<li class=\"disabled\"><span>$p</span></li>";
 			}
 			//pages
 			if ($lastpage < 7 + ($this->adjacents * 2)){//not enough pages to bother breaking it up
 				for ($counter = 1; $counter <= $lastpage; $counter++){
 					if ($counter == $this->page)
-						$this->pagination .= "<span class=\"current\">$counter</span>";
+						$this->pagination .= "<li class=\"active\"><span>$counter</span></li>";
 					else
-						$this->pagination .= "<a href=\"".$this->get_pagenum_link($counter)."\">$counter</a>";
+						$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($counter)."\">$counter</a></li>";
 				}
 			}
 			elseif($lastpage > 5 + ($this->adjacents * 2)){//enough pages to hide some
@@ -151,47 +151,47 @@ class Dpagination{
 				if($this->page < 1 + ($this->adjacents * 2)){
 					for ($counter = 1; $counter < 4 + ($this->adjacents * 2); $counter++){
 						if ($counter == $this->page)
-							$this->pagination .= "<span class=\"current\">$counter</span>";
+							$this->pagination .= "<li class=\"active\"><span>$counter</span></li>";
 						else
-							$this->pagination .= "<a href=\"".$this->get_pagenum_link($counter)."\">$counter</a>";
+							$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($counter)."\">$counter</a></li>";
 					}
 					$this->pagination .= "...";
-					$this->pagination .= "<a href=\"".$this->get_pagenum_link($lpm1)."\">$lpm1</a>";
-					$this->pagination .= "<a href=\"".$this->get_pagenum_link($lastpage)."\">$lastpage</a>";
+					$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($lpm1)."\">$lpm1</a></li>";
+					$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($lastpage)."\">$lastpage</a></li>";
 				}
 				//in middle; hide some front and some back
 				elseif($lastpage - ($this->adjacents * 2) > $this->page && $this->page > ($this->adjacents * 2)){
-					$this->pagination .= "<a href=\"".$this->get_pagenum_link(1)."\">1</a>";
-					$this->pagination .= "<a href=\"".$this->get_pagenum_link(2)."\">2</a>";
+					$this->pagination .= "<li><a href=\"".$this->get_pagenum_link(1)."\">1</a></li>";
+					$this->pagination .= "<li><a href=\"".$this->get_pagenum_link(2)."\">2</a></li>";
 					$this->pagination .= "...";
 					for ($counter = $this->page - $this->adjacents; $counter <= $this->page + $this->adjacents; $counter++)
 						if ($counter == $this->page)
-							$this->pagination .= "<span class=\"current\">$counter</span>";
+							$this->pagination .= "<li class=\"active\"><span>$counter</span></li>";
 							else
-								$this->pagination .= "<a href=\"".$this->get_pagenum_link($counter)."\">$counter</a>";
+								$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($counter)."\">$counter</a></li>";
 								$this->pagination .= "...";
-								$this->pagination .= "<a href=\"".$this->get_pagenum_link($lpm1)."\">$lpm1</a>";
-								$this->pagination .= "<a href=\"".$this->get_pagenum_link($lastpage)."\">$lastpage</a>";
+								$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($lpm1)."\">$lpm1</a></li>";
+								$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($lastpage)."\">$lastpage</a></li>";
 				}
 				//close to end; only hide early pages
 								else{
-								$this->pagination .= "<a href=\"".$this->get_pagenum_link(1)."\">1</a>";
-								$this->pagination .= "<a href=\"".$this->get_pagenum_link(2)."\">2</a>";
+								$this->pagination .= "<li><a href=\"".$this->get_pagenum_link(1)."\">1</a></li>";
+								$this->pagination .= "<li><a href=\"".$this->get_pagenum_link(2)."\">2</a></li>";
 								$this->pagination .= "...";
 								for ($counter = $lastpage - (2 + ($this->adjacents * 2)); $counter <= $lastpage; $counter++)
 									if ($counter == $this->page)
-										$this->pagination .= "<span class=\"current\">$counter</span>";
+										$this->pagination .= "<li class=\"active\"><span>$counter</span></li>";
 										else
-										$this->pagination .= "<a href=\"".$this->get_pagenum_link($counter)."\">$counter</a>";
+										$this->pagination .= "<li><a href=\"".$this->get_pagenum_link($counter)."\">$counter</a></li>";
 								}
 								}
 												if($this->page){
 									//siguiente button
 									if ($this->page < $counter - 1)
-										$this->pagination .= "<a href=\"".$this->get_pagenum_link($next)."\" class=\"next\">$n</a>";
+										$this->pagination .= "<li class=\"next\"><a href=\"".$this->get_pagenum_link($next)."\" >$n</a></li>";
 										else
-										$this->pagination .= "<span class=\"disabled\">$n</span>";
-										if($this->showCounter)$this->pagination .= "<div class=\"pagination_data\">($this->total_pages Pages)</div>";
+										$this->pagination .= "<li class=\"disabled\"><span>$n</span></li>";
+										if($this->showCounter)$this->pagination .= "<ul class=\"pagination_data\">($this->total_pages Pages)</ul>";
 									}
 									}
 	
