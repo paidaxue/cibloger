@@ -349,6 +349,100 @@ class Home extends ST_Controller{
 	
 	}
 	
+	/**
+	 * 归档
+	 *
+	 * @access public
+	 * @param  int  $year 归档年（必需）
+	 * @param  int  $month 归档月（可选）
+	 * @param  int  $day  归档日（可选）
+	 * @param  string  $page  页码
+	 * @return void
+	 */
+	public function archives($year, $month = NULL, $day = NULL, $page = 'p1')
+	{
+		if(empty($year))
+		{
+			redirect(site_url());
+		}
+	
+		/** 基本参数 */
+		$year = intval($year);
+		$month = intval($month);
+		$day  = intval($day);
+		$date = $this->_archive_hints($year, $month, $day);
+	
+		/** 分页参数 */
+		$page = str_replace('p','', $page);
+		$this->_init_pagination($page);
+	
+		$this->_posts = $this->posts_mdl
+		->get_posts_by_date($year, $month, $day, $this->_limit, $this->_offset)
+		->result();
+		$this->_total_count = $this->posts_mdl
+		->get_posts_by_date($year, $month, $day, 10000, 0)
+		->num_rows();
+	
+		if(!empty($this->_posts))
+		{
+			$this->_prepare_posts();
+	
+			$this->_apply_pagination(site_url($this->_uri).'/p%/');
+		}
+	
+		/** 页面初始化 */
+		$data['page_title'] = $date;
+		$data['page_description'] = sprintf('日志归档：%s', $date);
+		$data['page_keywords'] = setting_item('blog_keywords');
+		$data['posts'] = $this->_posts;
+		$data['parsed_feed'] = Common::render_feed_meta();
+		$data['current_view_hints'] = sprintf('%s日志归档（第 %d 页 / 共 %d 篇）', $date, $this->_current_page, $this->_total_count);
+		$data['pagination'] = $this->_pagination;
+	
+		$this->load_theme_view('index', $data);
+	
+	}
+	
+	
+	/**
+	 * 提取归档提示语
+	 *
+	 * @access private
+	 * @param  int  $year 归档年（必需）
+	 * @param  int  $month 归档月（可选）
+	 * @param  int  $day  归档日（可选）
+	 * @return string
+	 */
+	private function _archive_hints($year, $month, $day)
+	{
+		if($year > 0)
+		{
+			if($month > 0)
+			{
+				if($day > 0)
+				{
+					$month = sprintf("%02d", $month);
+					$day = sprintf("%02d", $day);
+					$this->_uri .= "$year/$month/$day";
+	
+					return date('Y年m月d日', mktime(0, 0, 0, $month, $day, $year));
+				}
+	
+				$month = sprintf("%02d", $month);
+				$this->_uri .= "$year/$month";
+	
+				return date('Y年m月', mktime(0, 0, 0, $month, 1, $year));
+			}
+				
+			$this->_uri .= $year;
+				
+			return date('Y年', mktime(0, 0, 0, 1, 1, $year));
+		}
+	
+		return;
+	}
+	
+	
 	
 }
 

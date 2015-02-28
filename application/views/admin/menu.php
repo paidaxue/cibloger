@@ -15,6 +15,9 @@
             <li><?php echo anchor(site_url('admin/posts/manage'),'文章管理',array('title'=>'文章管理'));?></li>
             <li><?php echo anchor(site_url('admin/posts/write'),'写新文章',array('title'=>'写新文章'));?></li>
           </ul>
+          <ul class="nav nav-sidebar">
+          	<li><?php echo anchor(site_url('home'),'查看网站',array('title'=>'查看网站','target'=>'_blank'));?></li>
+          </ul>
         </div>
  </div>
        

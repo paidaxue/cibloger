@@ -48,6 +48,15 @@ $route['authors/(:any)'] = 'home/authors/$1';		//根据作者得到文章
 $route['tag/(:any)'] = 'home/tag/$1';
 $route['page/(:num)'] = 'home/index/$1';
 
+//注意路由的顺序
+$route['archives/(\d{4})'] = 'home/archives/$1/0/0/p1';
+$route['archives/(\d{4})/(\d{2})'] = 'home/archives/$1/$2/0/p1';
+$route['archives/(\d{4})/(\d{2})/(\d{2})'] = 'home/archives/$1/$2/$3/p1';
+$route['archives/(\d{4})/p([0-9]+)'] = 'home/archives/$1/0/0/$2';
+$route['archives/(\d{4})/(\d{2})/p([0-9]+)'] = 'home/archives/$1/$2/0/$3';
+$route['archives/(\d{4})/(\d{2})/(\d{2})/p([0-9]+)'] = 'home/archives/$1/$2/$3/$4';
+$route['pages/(:any)'] = 'pages/index/$1';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

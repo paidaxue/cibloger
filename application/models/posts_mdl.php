@@ -247,7 +247,60 @@ class Posts_mdl extends CI_Model{
 		return $this->db->get(self::TBL_POSTS);
 	}
 	
+	/**
+	 * 日志归档：按日/按月/按年归档
+	 *
+	 * @access public
+	 * @param int optional $year 归档年
+	 * @param int optional $month 归档月
+	 * @param int optional $day 归档日
+	 * @param int    $limit 条数
+	 * @param int    $offset 偏移量
+	 * @return array - 内容信息
+	 */
+	public function get_posts_by_date($year = NULL, $month = NULL, $day = NULL, $limit = NULL, $offset = NULL)
+	{
+		//neither of the args are given, so exit from the func.
+		if(empty($year) && empty($month) && empty($day)) exit();
 	
+		//archive by day
+		if(!empty($year) && !empty($month) && !empty($day))
+		{
+			$from = mktime(0, 0, 0, $month, $day, $year);
+			$to = mktime(23, 59, 59, $month, $day, $year);
+		}
+		//archive by month
+		else if(!empty($year) && !empty($month))
+		{
+			$from = mktime(0, 0, 0, $month, 1, $year);
+			$to = mktime(23, 59, 59, $month, date('t', $from), $year);
+		}
+		//archive by year
+		else if(!empty($year))
+		{
+			$from = mktime(0, 0, 0, 1, 1, $year);
+			$to = mktime(23, 59, 59, 12, 31, $year);
+		}
+	
+		$this->db->select('posts.*,users.screenName');
+		$this->db->join('users','users.uid = posts.authorId');
+		$this->db->where('posts.created >=', $from);
+		$this->db->where('posts.created <=', $to);
+		$this->db->where('posts.status','publish');
+		$this->db->where('posts.type','post');
+	
+		if($limit && is_numeric($limit))
+		{
+			$this->db->limit(intval($limit));
+		}
+	
+		if($offset && is_numeric($offset))
+		{
+			$this->db->offset(intval($limit));
+		}
+	
+		return $this->db->get(self::TBL_POSTS);
+	}
 	
 }
 
