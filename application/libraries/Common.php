@@ -113,7 +113,7 @@ class Common{
 	 * @param number $marLength	缩略名最大长度
 	 * @param string $charset	字符编码
 	 */
-	public static function repair_slugName($str,$default=NULL,$marLength=200,$charset='UTF-8'){
+	public static function repair_slugName($str,$default=NULL,$maxLength=200,$charset='UTF-8'){
 		
 		//替换特殊字符
 		$str = str_replace(array("'",":","\\","/"),"",$str);
